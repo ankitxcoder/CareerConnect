@@ -1,8 +1,32 @@
 import {Router} from "express";
-import { activeCheck } from "../controllers/posts.controller.js";
+import { activeCheck, commentPost, createPost, delete_comment_by_id, deletePost, get_comment_by_post, getAllPost, increment_likes } from "../controllers/posts.controller.js";
+import multer from "multer";
+
 
 const router = Router();
 
+
+const storage = multer.diskStorage({
+    destination: (req,file,cb) =>{
+        cb(null,"uploads/")
+    },
+    filename : (req,file,cb) => {
+        cb(null,file.originalname)
+    }
+})
+
+const upload = multer({storage : storage});
+
+
 router.route("/").get(activeCheck);
+
+router.route("/post").post(upload.single("media"),createPost);
+router.route("/posts").get(getAllPost);
+router.route("/delete_post").post(deletePost);
+router.route("/comment_post").post(commentPost);
+router.route("/get_comment_by_post").get(get_comment_by_post);
+router.route("/delete_comment_by_post").delete(delete_comment_by_id);
+router.route("/increment_post_like").post(increment_likes);
+
 
 export default router;

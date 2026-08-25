@@ -30,7 +30,7 @@ const postSchema = mongoose.Schema(
             type : Boolean,
             default : true
         },
-        filetype : {
+        fileType : {
             type : String,
             default : ""
         },

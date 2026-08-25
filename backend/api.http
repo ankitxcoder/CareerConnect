@@ -2,10 +2,10 @@ POST http://localhost:9000/register
 Content-Type: application/json
 
 {
-  "userName": "ankit02",
+  "userName": "1ankit02",
   "password": "123456",
-  "email": "ankit@test.com",
-  "name": "Ankit"
+  "email": "1ankit@test.com",
+  "name": "1Ankit"
 }
 ###
 
@@ -16,8 +16,48 @@ Content-Type: application/json
 {
   
   "password": "123456",
-  "email": "ankit@test.com"
+  "email": "2ankit@test.com"
   
 }
 
+
+###
+
+GET  http://localhost:9000/getUserAndProfile
+Content-Type: application/json
+
+{
+  "token" : "59fc6a7ab6b63a28b7a57cf219405586b5cd579664068f19efd0a19e757a3414"
+
+}
+
+###
+POST  http://localhost:9000/update_profile_data
+Content-Type: application/json
+
+
+{
+  "token" : "59fc6a7ab6b63a28b7a57cf219405586b5cd579664068f19efd0a19e757a3414",
+  "currentPost" : " working from api.http",
+  "pastWork" : [{
+    "company":"MicroSoft",
+    "position":"CTO",
+    "year":2
+  }],
+  "education":[{
+    "school":"jai School",
+    "degree": "BTech",
+    "fieldOfStudy":"2015-2026"
+  }]
+}
+
+
+###
+
+GET   http://localhost:9000/get_all_users
+Content-Type: application/json
+
+
+
+###
 
