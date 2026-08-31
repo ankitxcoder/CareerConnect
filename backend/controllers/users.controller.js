@@ -161,9 +161,10 @@ export const updateUserProfile = async (req,res) => {
 
 export const getUserAndProfile = async (req,res)=>{
     try {
-        const { token } = req.body;
+        const { token } = req.query;
+        console.log({token:token})
 
-        const user = await User.findOne({token : token});
+        const user = await User.findOne({token:token});
 
         if (!user){
             return res.status(404).json({message : "user not found"})
@@ -175,7 +176,7 @@ export const getUserAndProfile = async (req,res)=>{
         return res.json(userProfile);
 
     } catch (err){
-        return res.status(500).json({message: error.message});
+        return res.status(500).json({message: err.message});
     }
 }
 

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { loginUser, registerUser } from "../../action/authAction"
+import { getAboutUser, loginUser, registerUser } from "../../action/authAction"
 
 const initialState = {
     user: [],
@@ -43,7 +43,7 @@ const authSlice = createSlice({
         .addCase(loginUser.rejected,(state,action)=>{
             state.isLoading = false;
             state.isError = true;
-            state.message= action.paylaod
+            state.message= action.payload
         })
 
         .addCase(registerUser.pending,(state)=>{
@@ -52,18 +52,36 @@ const authSlice = createSlice({
         })
 
         .addCase(registerUser.fulfilled,(state,action)=>{
-            state.isLoading = true,
+            state.isLoading = false,
             state.isError = false,
             state.isSuccess= true,
-            state.loggedIn= true,
-            state.message= "Registration is SuccessFull"
+            state.loggedIn= false,
+            state.message= {
+                message: "Registration Is SuccessFull Please Sign in."
+            }
         })
 
         .addCase(registerUser.rejected,(state,action)=>{
             state.isLoading = false,
             state.isError = true,
-            state.message = action.paylaod
+            state.message = action.payload
         })
+
+        .addCase(getAboutUser.pending,(state)=>{
+            state.isLoading=true;
+        })
+
+        .addCase(getAboutUser.fulfilled,(state,action)=>{
+            state.isLoading= false;
+            state.profileFetched= true;
+            state.user = action.payload;
+        })
+
+        .addCase(getAboutUser.rejected,(state,action)=>{
+            state.isLoading = false;
+            state.isError = true;
+            state.message = action.payload;
+        });
     }
 });
 
