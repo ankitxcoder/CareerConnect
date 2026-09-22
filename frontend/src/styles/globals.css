@@ -1,5 +1,7 @@
 @import "tailwindcss";
+@custom-variant dark (&:is(.dark *)); 
 
+/* Your existing code... */
 /* body{
     background-color: rgb(155, 154, 154);
 } */

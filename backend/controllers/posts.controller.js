@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import Post from "../models/posts.model.js";
 import User from "../models/users.model.js";
+import Comment from "../models/comments.model.js";
 
 //checking api that it working or not 
 
@@ -76,7 +77,7 @@ export const deletePost = async (req,res)=>{
                 return res.status(403).json({message:"Unauthorized"});
             }
 
-            await Post.deleteone({_id:post_id});
+            await Post.deleteOne({_id:post_id});
 
             return res.json({message:"post Deleted"});
     }catch(err){
@@ -93,19 +94,19 @@ export const commentPost = async (req,res)=>{
     const user = await User.findOne({token:token}).select("_id");
 
     if(!user){
-        res.status(404).json({message:"User not found"});
+        return res.status(404).json({message:"User not found"});
     }
 
     const post = await Post.findOne({_id:post_id});
 
     if(!post){
-        res.status(404).json({message:"Post Not Found"});
+       return res.status(404).json({message:"Post Not Found"});
     }
 
     const comment = new Comment({
-        user_id:user._id,
+        userId:user._id,
         postId:post_id,
-        comment:commentBody
+        body:commentBody
     });
 
     await comment.save();
@@ -122,16 +123,30 @@ export const commentPost = async (req,res)=>{
 
 export const get_comment_by_post = async (req,res)=>{
 
-     const {post_id} = req.body;
+     const {post_id} = req.query;
     try{
 
-        const post = Post.findOne(post_id);
+        const post = await Post.findOne({_id:post_id});
 
         if(!post){
-            res.status(404).json({message:"Post not found"});
+            return res.status(404).json({message:"Post not found hai"});
         }
 
-        return res.json({comments:post.comments});
+        const comments = await Comment
+        .find({postId:post_id})          //.find() yani array jayega 
+        .populate("userId","userName name profilePicture");
+
+        return res.json({
+            comments : comments,
+            post_id:post_id
+        });
+
+
+        // return res.json({comments:post.comments,
+        //     post_id:post._id
+        // });
+        
+        
         
 
 
@@ -178,7 +193,8 @@ export const increment_likes = async (req,res)=>{
     const {token,post_id} = req.body;
     try{
 
-        const post = Post.findOne({id:post_id});
+        // const post = await Post.findById(post_id);  aise bhe likh skte ho 
+    const post = await Post.findOne({_id:post_id});
 
         if(!post){
             res.status(404).json({message:" Post not found"});

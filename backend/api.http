@@ -37,7 +37,8 @@ Content-Type: application/json
 
 
 {
-  "token" : "59fc6a7ab6b63a28b7a57cf219405586b5cd579664068f19efd0a19e757a3414",
+  "token" : "79bf7e91a7d39707ef3caf6edb8b068274e457a0c2470ccbc4fff77811016c18",
+  "bio" : "hey i am 2 profile love to code heee",
   "currentPost" : " working from api.http",
   "pastWork" : [{
     "company":"MicroSoft",

@@ -62,30 +62,30 @@ function LoginComponent() {
     <div>
 
       <UserLayout>
-        <div className="flex min-h-[calc(100vh-66.4px)] justify-center bg-gray-50 px-6 py-6 border border-pink-300">
+        <div className="flex min-h-[calc(100vh-66.4px)] justify-center bg-gray-50 dark:bg-gray-900 px-6 py-6 border border-pink-300">
 
-          <div className='flex w-full max-w-3xl flex-col md:flex-row overflow-hidden rounded-xl bg-black-50 shadow-2xl'>
+          <div className='flex w-full max-w-3xl flex-col md:flex-row overflow-hidden bg-white drak:bg-gray-800 rounded-xl shadow-2xl'>
                    
                   
                     
                     <div className='w-full p-8 md:w-1/2 justify-items-center font-bold'>
-                       <p>{isLogin ? "Sign In" : "Sign Up"}</p>
+                       <p className=' dark:text-gray-700'>{isLogin ? "Sign In" : "Sign Up"}</p>
                        {authState.message?.message}
 
                 <form onSubmit={handleSubmit}>
                    
                     { !isLogin && (
                    <div className='flex gap-2 mb-5 flex-col gap-5'>
-                       <input className="m-2 border-2 rounded-xl px-4" type="text" placeholder="enter Name" name="name" value={formData.name} onChange={handleChange}></input>
-                       <input className="m-2 border-2 rounded-xl px-4" type="text" placeholder="enter UserName" name="userName" value={formData.userName} onChange={handleChange}></input>
+                       <input className="m-2 border-2 rounded-xl px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400" type="text" placeholder="enter Name" name="name" value={formData.name} onChange={handleChange}></input>
+                       <input className="m-2 border-2 rounded-xl px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400" type="text" placeholder="enter UserName" name="userName" value={formData.userName} onChange={handleChange}></input>
                       
                     </div>
                            )}
 
 
                     <div className='flex flex-col max-w-2x1 gap-5'>
-                      <input className="m-2 rounded-xl border-2 px-4" type="email" placeholder="email" name="email" value={formData.email} onChange={handleChange}/>
-                      <input className="border-2 rounded-xl  m-2 px-4" type="password" placeholder="password" name="password" value={formData.password} onChange={handleChange}/>
+                      <input className="m-2 rounded-xl border-2 px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400" type="email" placeholder="email" name="email" value={formData.email} onChange={handleChange}/>
+                      <input className="border-2 rounded-xl  m-2 px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400" type="password" placeholder="password" name="password" value={formData.password} onChange={handleChange}/>
                       <button className="w-full bg-cyan-300 cursor-pointer hover:bg-sky-700 transition delay-150 duration-300 ease-in-out" type='submit'> Submit</button>
 
                     </div>

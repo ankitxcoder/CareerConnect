@@ -22,9 +22,9 @@ router.route("/").get(activeCheck);
 
 router.route("/post").post(upload.single("media"),createPost);
 router.route("/posts").get(getAllPost);
-router.route("/delete_post").post(deletePost);
+router.route("/delete_post").delete(deletePost);
 router.route("/comment_post").post(commentPost);
-router.route("/get_comment_by_post").get(get_comment_by_post);
+router.route("/get_comment_by_post").get(get_comment_by_post);   //get query pr hm controller me extract krte tym query se krengye n ki body se
 router.route("/delete_comment_by_post").delete(delete_comment_by_id);
 router.route("/increment_post_like").post(increment_likes);
 
