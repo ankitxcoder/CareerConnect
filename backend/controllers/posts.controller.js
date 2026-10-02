@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import Post from "../models/posts.model.js";
 import User from "../models/users.model.js";
 import Comment from "../models/comments.model.js";
