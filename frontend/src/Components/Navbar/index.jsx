@@ -39,7 +39,7 @@ function Navbar({ isDarkMode, setIsDarkMode }) {
           {authState.profileFetched ? (
             <div
               onClick={() => router.push("/profile")}
-              className="ml-auto w-35 text-[#d1dbdb] font-bold"
+              className="ml-auto w-35 text-[#d1dbdb] font-bold cursor-pointer"
             >
               Profile({authState.user?.userId?.name})
             </div>
@@ -50,13 +50,13 @@ function Navbar({ isDarkMode, setIsDarkMode }) {
               }}
               className="ml-auto w-35 mr-10 group rounded-md bg-gradient-to-r from-pink-400 to-blue-600 p-[2px]"
             >
-              <span className="text-gray-600 block text-lg text-center font-medium group-hover:text-white rounded-md bg-white px-4 py-2.5 leading-5 transition-all duration-75 ease-in group-hover:bg-transparent cursor-pointer">
+              <span className="text-gray-600 block text-lg text-center font-medium group-hover:text-white rounded-md text-white hover:translate-0.5 px-4 py-2.5 leading-5 transition-all duration-75 ease-in group-hover:bg-transparent cursor-pointer">
                 be a part
               </span>
             </div>
           )}
 
-          {authState.profileFetched ? (
+          {authState.profileFetched && (
             <p
               onClick={() => {
                 localStorage.removeItem("token");
@@ -67,9 +67,7 @@ function Navbar({ isDarkMode, setIsDarkMode }) {
             >
               LogOut
             </p>
-          ) : (
-            ""
-          )}
+          ) }
         </div>
       </div>
     </div>

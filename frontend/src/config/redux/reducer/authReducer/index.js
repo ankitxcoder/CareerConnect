@@ -4,10 +4,12 @@ import {
   getAllUser,
   getConnectionRequest,
   getMyConnectionRequest,
+  getUserConnections,
   getWhatAreMyConnectionRequest,
   loginUser,
   registerUser,
   sendConnectionRequest,
+  update_user_profile,
 } from "../../action/authAction";
 
 const initialState = {
@@ -151,7 +153,43 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload.message;
+      })
+
+      .addCase(getUserConnections.pending, (state) => {
+        state.isLoading = true;
+        state.isError == false;
+      })
+
+      .addCase(getUserConnections.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.getUserConnections = action.payload.myconnections;
+      })
+
+      .addCase(getUserConnections.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = true;
+      })
+
+
+      .addCase(update_user_profile.pending,(state)=>{
+        state.isLoading = true;
+        state.isError = false;
+      })
+
+      .addCase(update_user_profile.fulfilled,(state,action)=>{
+        state.isLoading = false;
+        state.isError = false;
+        state.message = "Profile picture uploaded";
+      })
+
+      .addCase(update_user_profile.rejected,(state,action)=>{
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
+
+      
   },
 });
 

@@ -60,55 +60,81 @@ function LoginComponent() {
 
   return (
     <div>
-
       <UserLayout>
         <div className="flex min-h-[calc(100vh-66.4px)] justify-center bg-gray-50 dark:bg-gray-900 px-6 py-6 border border-pink-300">
+          <div className="flex w-full max-w-3xl flex-col md:flex-row overflow-hidden bg-white drak:bg-gray-800 rounded-xl shadow-2xl ">
+            <div className="w-full p-8 md:w-1/2 justify-items-center font-bold bg-red-400">
+              <p className=" dark:text-gray-700">
+                {isLogin ? "Sign In" : "Sign Up"}
+              </p>
+              {authState.message?.message}
 
-          <div className='flex w-full max-w-3xl flex-col md:flex-row overflow-hidden bg-white drak:bg-gray-800 rounded-xl shadow-2xl'>
-                   
-                  
-                    
-                    <div className='w-full p-8 md:w-1/2 justify-items-center font-bold'>
-                       <p className=' dark:text-gray-700'>{isLogin ? "Sign In" : "Sign Up"}</p>
-                       {authState.message?.message}
+              <form onSubmit={handleSubmit}>
+                {!isLogin && (
+                  <div className="flex gap-2 mb-5 flex-col gap-5">
+                    <input
+                      className="m-2 border-2 rounded-xl px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400"
+                      type="text"
+                      placeholder="enter Name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                    ></input>
+                    <input
+                      className="m-2 border-2 rounded-xl px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400"
+                      type="text"
+                      placeholder="enter UserName"
+                      name="userName"
+                      value={formData.userName}
+                      onChange={handleChange}
+                    ></input>
+                  </div>
+                )}
 
-                <form onSubmit={handleSubmit}>
-                   
-                    { !isLogin && (
-                   <div className='flex gap-2 mb-5 flex-col gap-5'>
-                       <input className="m-2 border-2 rounded-xl px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400" type="text" placeholder="enter Name" name="name" value={formData.name} onChange={handleChange}></input>
-                       <input className="m-2 border-2 rounded-xl px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400" type="text" placeholder="enter UserName" name="userName" value={formData.userName} onChange={handleChange}></input>
-                      
-                    </div>
-                           )}
+                <div className="flex flex-col max-w-2x1 gap-5">
+                  <input
+                    className="m-2 rounded-xl border-2 px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400"
+                    type="email"
+                    placeholder="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                  <input
+                    className="border-2 rounded-xl  m-2 px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400"
+                    type="password"
+                    placeholder="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                  <button
+                    className="w-full bg-cyan-300 cursor-pointer hover:bg-sky-700 transition delay-150 duration-300 ease-in-out"
+                    type="submit"
+                  >
+                    {" "}
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
 
-
-                    <div className='flex flex-col max-w-2x1 gap-5'>
-                      <input className="m-2 rounded-xl border-2 px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400" type="email" placeholder="email" name="email" value={formData.email} onChange={handleChange}/>
-                      <input className="border-2 rounded-xl  m-2 px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400" type="password" placeholder="password" name="password" value={formData.password} onChange={handleChange}/>
-                      <button className="w-full bg-cyan-300 cursor-pointer hover:bg-sky-700 transition delay-150 duration-300 ease-in-out" type='submit'> Submit</button>
-
-                    </div>
-
-                   
-                             </form>
-                    
-
-
-                    </div>
-        
-                    <div className="w-full bg-gradient-to-br from-pink-500 to-blue-600 p-8 text-white md:w-1/2">
-                                
-                                <p className='cursor-pointer' onClick={()=>setIsLogin(!isLogin)}>{isLogin ? "Sign Up" : "sign In"}</p>
-                    </div>
-
+            <div className="w-full bg-gradient-to-br from-pink-500 to-blue-600 p-8 text-white md:w-1/2 mask-l-from-95% mask-l-to-98%">
+              <p className=" text-center font-medium mt-10  transition-all duration-300 -translate-0.5">
+                {isLogin ? "don't have an account" : "Alreday have an account?"}
+              </p>
+              <p
+                className="cursor-pointer text-center font-medium mt-10 hover:underline transition-all duration-300 hover-text hover:text-blue-800"
+                onClick={() => setIsLogin(!isLogin)}
+              >
+                {isLogin ? "Sign Up" : "Sign In"}
+              </p>
+            </div>
           </div>
-
         </div>
       </UserLayout>
-        
     </div>
-  )
+  );
 }
 
 export default LoginComponent

@@ -1,6 +1,8 @@
 import { api, BASE_URL } from "@/config";
 import {
+  getAboutUser,
   getMyConnectionRequest,
+  getUserConnections,
   getWhatAreMyConnectionRequest,
   sendConnectionRequest,
 } from "@/config/redux/action/authAction";
@@ -23,7 +25,12 @@ export default function ViewProfilePage({ userProfile }) {
 
   const [connectionStatus, setConnectionStatus] = useState("Not_Connected");
 
+  const toKnowuserForConnection =
+    authState.user?.userId?._id === userProfile?.userId?._id;
+
+    
   const getUsersPost = async () => {
+    await dispatch(getAboutUser({token:localStorage.getItem("token")}));
     await dispatch(getAllPosts());
     await dispatch(
       getMyConnectionRequest({ token: localStorage.getItem("token") }),
@@ -31,6 +38,8 @@ export default function ViewProfilePage({ userProfile }) {
     await dispatch(
       getWhatAreMyConnectionRequest({ token: localStorage.getItem("token") }),
     );
+
+    await dispatch(getUserConnections({token:localStorage.getItem("token")}));
   };
 
   useEffect(() => {
@@ -45,10 +54,10 @@ export default function ViewProfilePage({ userProfile }) {
   }, [postState.posts, userProfile]);
 
   useEffect(() => {
-    const dostBnChukeHaiYaRequestAyiHai = authState.connections?.some(
+    const dostBnChukeHaiYaRequestAyiHai = authState.getUserConnections?.some(
       (req) =>
         (req.userId?._id === userProfile.userId._id ||
-          req.connectionId === userProfile.userId._id) &&
+          req.connectionId._id === userProfile.userId?._id) &&
         req.statusAccepted === true,
     );
 
@@ -65,7 +74,7 @@ export default function ViewProfilePage({ userProfile }) {
     } else {
       setConnectionStatus("Not_connected");
     }
-  }, [authState.connections, authState.connectionRequest, userProfile]);
+  }, [authState.getUserConnections, authState.connectionRequest, userProfile]);
 
   return (
     <UserLayout>
@@ -87,35 +96,44 @@ export default function ViewProfilePage({ userProfile }) {
             <div className="flex flex-row">
               <div className="flex flex-col gap-4 mt-4 w-fit">
                 <div className="flex flex-row gap-10 items-center">
-                  {connectionStatus === "Connected" ? (
-                    <button className="border-2 p-2 px-4 rounded-md bg-green-500 text-white">
-                      Connected
-                    </button>
-                  ) : connectionStatus === "Pending" ? (
-                    <button className="border-2 p-2 px-4 rounded-md bg-green-500 text-white">
-                      Pending
-                    </button>
-                  ) : (
-                    <button
-                      className="border-2 p-2 px-4 rounded-md bg-blue-500 text-white"
-                      onClick={async () => {
-                        setConnectionStatus("Pending");
-                        await dispatch(
-                          sendConnectionRequest({
-                            token: localStorage.getItem("token"),
-                            connectionId: userProfile.userId._id,
-                          }),
-                        );
-                      }}
-                    >
-                      Connect
-                    </button>
-                  )}
+                  {!toKnowuserForConnection ? (
+                    connectionStatus === "Connected" ? (
+                      <button className="border-2 p-2 px-4 rounded-md bg-green-500 text-white">
+                        Connected
+                      </button>
+                    ) : connectionStatus === "Pending" ? (
+                      <button className="border-2 p-2 px-4 rounded-md bg-green-500 text-white">
+                        Pending
+                      </button>
+                    ) : (
+                      <button
+                        className="border-2 p-2 px-4 rounded-md bg-blue-500 text-white"
+                        onClick={async () => {
+                          setConnectionStatus("Pending");
+                          await dispatch(
+                            sendConnectionRequest({
+                              token: localStorage.getItem("token"),
+                              connectionId: userProfile.userId._id,
+                            }),
+                          );
+                        }}
+                      >
+                        Connect
+                      </button>
+                    )
+                  ) : null}
 
-                  <div onClick={async () => {
-                     const response = await api.get(`/user/download_resume?id=${userProfile.userId._id}`);
-                     window.open(`${BASE_URL}/${response.data.message}`,"_blank")
-                  }}>
+                  <div
+                    onClick={async () => {
+                      const response = await api.get(
+                        `/user/download_resume?id=${userProfile.userId._id}`,
+                      );
+                      window.open(
+                        `${BASE_URL}/${response.data.message}`,
+                        "_blank",
+                      );
+                    }}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

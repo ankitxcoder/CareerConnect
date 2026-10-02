@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "@/config";
+import { retry } from "@reduxjs/toolkit/query";
 
 export const loginUser = createAsyncThunk(
   "user/login",
@@ -92,7 +93,6 @@ export const sendConnectionRequest = createAsyncThunk(
   },
 );
 
-
 export const getMyConnectionRequest = createAsyncThunk(
   "user/getConnectionRequest",
   async (getConnectionData, thunkAPI) => {
@@ -110,39 +110,109 @@ export const getMyConnectionRequest = createAsyncThunk(
   },
 );
 
-
 export const getWhatAreMyConnectionRequest = createAsyncThunk(
   "user,getWhatAreMyConnectionRequest",
-  async (getWhatAreMyConnectionRequestData,thunkAPI)=>{
-    try{
-        const response = await api.get("/user/user_connection_request", {
-          params: {
-            token: getWhatAreMyConnectionRequestData.token,
-          },
-        });
+  async (getWhatAreMyConnectionRequestData, thunkAPI) => {
+    try {
+      const response = await api.get("/user/user_connection_request", {
+        params: {
+          token: getWhatAreMyConnectionRequestData.token,
+        },
+      });
 
-        return thunkAPI.fulfillWithValue(response.data);
-    }catch(err){
-        return thunkAPI.rejectWithValue(err.response.data.messsage)
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data.messsage);
     }
-  }
+  },
 );
 
-
-
 export const acceptConnection = createAsyncThunk(
-    "user,acceptConnecrion",
-    async (acceptConnectionData,thunkAPI)=>{
-        try{
-            const response = await api.post("/user/accept_connection_request", {
-              token: acceptConnectionData.token,
-              reuestId: acceptConnectionData.reuestId,
-              action_type: acceptConnectionData.action_type,
-            });
+  "user,acceptConnecrion",
+  async (acceptConnectionData, thunkAPI) => {
+    try {
+      const response = await api.post("/user/accept_connection_request", {
+        token: acceptConnectionData.token,
+        requestId: acceptConnectionData.requestId,
+        action_type: acceptConnectionData.action_type,
+      });
 
-            return thunkAPI.fulfillWithValue(response.data);
-        }catch(err){
-            return thunkAPI.rejectWithValue(err.response.data.messsage)
-        }
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data.messsage);
     }
-)
+  },
+);
+
+export const getUserConnections = createAsyncThunk(
+  "user/getUserConnections",
+  async (getUserConnectionsData, thunkAPI) => {
+    try {
+      const response = await api.get("/user/get_user_connections", {
+        params: {
+          token: getUserConnectionsData.token,
+        },
+      });
+
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data.messsage);
+    }
+  },
+);
+
+export const update_user_profile = createAsyncThunk(
+  "user/update_user_profile",
+  async (updated_profile_data, thunkAPI) => {
+    try {
+      const response = await api.post(
+        "/upload_profile_picture",
+        updated_profile_data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      ); //updated_pr --> form data object hai
+
+      thunkAPI.dispatch(getAboutUser({ token: localStorage.getItem("token") }));
+
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  },
+);
+
+export const updateUserDetails = createAsyncThunk(
+  "user/updateUserDetails",
+  async (updateUserDetails_data, thunkAPI) => {
+    try {
+      const response = await api.post("/user_profile", updateUserDetails_data);
+
+      thunkAPI.dispatch(getAboutUser({ token: localStorage.getItem("token") }));
+
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  },
+);
+
+export const updateProfileDetails = createAsyncThunk(
+  "user,updateProfileDetails",
+  async (updateProfileDetails_data, thunkAPI) => {
+    try {
+      const response = await api.post(
+        "/update_profile_data",
+        updateProfileDetails_data,
+      );
+
+      thunkAPI.dispatch(getAboutUser({ token: localStorage.getItem("token") }));
+
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  },
+);

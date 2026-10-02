@@ -192,6 +192,8 @@ export const updateProfileData = async (req, res) => {
   }
 };
 
+
+
 export const getAllUserProfile = async (req, res) => {
   try {
     const profiles = await Profile.find().populate(
@@ -269,6 +271,7 @@ export const getMyConnectionRequest = async (req, res) => {
 
     const connections = await ConnectionRequest.find({
       connectionId: user._id,
+      statusAccepted:null
     }).populate("userId", "name userName profilePicture");
 
     return res.json({ connections });
@@ -297,7 +300,7 @@ export const whatAreMyConnections = async (req, res) => {
 };
 
 export const acceptConnectionRequest = async (req, res) => {
-  const { token, reuestId, action_type } = req.body;
+  const { token, requestId, action_type } = req.body;
 
   try {
     const user = await User.findOne({ token });
@@ -312,10 +315,10 @@ export const acceptConnectionRequest = async (req, res) => {
       return res.status(404).json({ messagge: "connnection not found" });
     }
 
-    if (acction_type === "accept") {
-      connecction.status_accepted = true;
+    if (action_type === "accept") {
+      connection.statusAccepted = true;
     } else {
-      connection.status_accepted = false;
+      connection.statusAccepted = false;
     }
 
     await connection.save();
@@ -346,3 +349,36 @@ export const getUserProfileAndUserBasedOnUserName = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+
+
+export const getUserConnections = async (req,res)=>{
+  const {token} = req.query;
+
+  try{
+
+    const user = await User.findOne({token});
+
+    if(!user){
+      return res.status(404).json({message:"user Not Found"});
+
+    }
+
+    const myconnections = await ConnectionRequest.find({
+      $or: [
+        {userId:user._id},
+        {connectionId:user._id}
+      ],
+      statusAccepted :true
+    }).populate("userId connectionId", "name userName  profilePicture");
+
+    return res.json({myconnections});
+  }catch(err){
+    return res.status(500).json({message:err.message})
+  }
+}
+
+
+
+

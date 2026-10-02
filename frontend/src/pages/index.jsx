@@ -12,7 +12,7 @@ export default function Home() {
           muted
           className="w-full h-full mx-auto absolute top-0 left-0  object-cover -z-10 opacity-60"
         >
-          <source src="/Networking_app_interface_animation_1080p_20260920143931_erasio (1).mp4" />
+          <source src="/video/Networking_app_interface_animation_1080p_20260920143931_erasio (1).mp4" />
         </video>
 
         <div className="container mx-auto px-6">

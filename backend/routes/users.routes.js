@@ -5,6 +5,7 @@ import {
   getAllUserProfile,
   getMyConnectionRequest,
   getUserAndProfile,
+  getUserConnections,
   getUserProfileAndUserBasedOnUserName,
   login,
   register,
@@ -15,16 +16,18 @@ import {
   whatAreMyConnections,
 } from "../controllers/users.controller.js";
 import multer from "multer";
+import { storage } from "../config/cloudinary.js";
+
 const router = Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.originalname);
+//   },
+// });
 
 const upload = multer({ storage: storage });
 
@@ -46,5 +49,5 @@ router.route("/user/accept_connection_request").post(acceptConnectionRequest);
 router
   .route("/user/get_profile_based_on_userName")
   .get(getUserProfileAndUserBasedOnUserName);
-
+router.route("/user/get_user_connections").get(getUserConnections);
 export default router;
