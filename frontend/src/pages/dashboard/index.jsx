@@ -68,7 +68,7 @@ function Dashboard() {
               <div className="flex flex-row items-start gap-4 w-full">
                 <img
                   className="w-12 rounded-full object-cover shadow-sm"
-                  src={`${BASE_URL}/${authState.user?.userId?.profilePicture}`}
+                  src={`${authState.user?.userId?.profilePicture}`}
                 />
                 <textarea
                   onChange={(e) => setPostContent(e.target.value)}

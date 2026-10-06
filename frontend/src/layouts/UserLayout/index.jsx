@@ -13,15 +13,12 @@ useEffect(()=>{
 
   return (
     <div className={`${isDarkMode ? "dark" : ""} min-h-screen`}>
-      <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode}>
-      </Navbar>
-              <div className="bg-gray-50 dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
-  
-                   {children}
-  
-               </div>
+      <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode}></Navbar>
+      <div className="bg-gray-50 dark:bg-gray-900 text-black dark:text-white transition-colors duration-300 ">
+        {children}
+      </div>
     </div>
-  )
+  );
 }
 
 export default UserLayout

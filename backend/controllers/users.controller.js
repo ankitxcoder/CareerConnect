@@ -105,6 +105,7 @@ export const uploadProfilePicture = async (req, res) => {
     }
 
     user.profilePicture = req.file.path;
+
     await user.save();
 
     return res.json({ message: "Profile Picture Updated" });
@@ -192,8 +193,6 @@ export const updateProfileData = async (req, res) => {
   }
 };
 
-
-
 export const getAllUserProfile = async (req, res) => {
   try {
     const profiles = await Profile.find().populate(
@@ -271,7 +270,7 @@ export const getMyConnectionRequest = async (req, res) => {
 
     const connections = await ConnectionRequest.find({
       connectionId: user._id,
-      statusAccepted:null
+      statusAccepted: null,
     }).populate("userId", "name userName profilePicture");
 
     return res.json({ connections });
@@ -291,7 +290,7 @@ export const whatAreMyConnections = async (req, res) => {
     }
     const connections = await ConnectionRequest.find({
       userId: user._id,
-    })
+    });
 
     return res.json({ connections });
   } catch (err) {
@@ -350,35 +349,23 @@ export const getUserProfileAndUserBasedOnUserName = async (req, res) => {
   }
 };
 
+export const getUserConnections = async (req, res) => {
+  const { token } = req.query;
 
+  try {
+    const user = await User.findOne({ token });
 
-
-export const getUserConnections = async (req,res)=>{
-  const {token} = req.query;
-
-  try{
-
-    const user = await User.findOne({token});
-
-    if(!user){
-      return res.status(404).json({message:"user Not Found"});
-
+    if (!user) {
+      return res.status(404).json({ message: "user Not Found" });
     }
 
     const myconnections = await ConnectionRequest.find({
-      $or: [
-        {userId:user._id},
-        {connectionId:user._id}
-      ],
-      statusAccepted :true
+      $or: [{ userId: user._id }, { connectionId: user._id }],
+      statusAccepted: true,
     }).populate("userId connectionId", "name userName  profilePicture");
 
-    return res.json({myconnections});
-  }catch(err){
-    return res.status(500).json({message:err.message})
+    return res.json({ myconnections });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
   }
-}
-
-
-
-
+};

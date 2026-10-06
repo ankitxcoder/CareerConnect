@@ -85,7 +85,7 @@ function MyProfile() {
             <div className=" relative h-50 w-full bg-cover bg-center bg-[url(https://cdn.pixabay.com/photo/2022/04/15/07/58/sunset-7133867_1280.jpg)]">
               <img
                 className="absolute object-cover -bottom-10 left-10 w-28 h-28 rounded-full"
-                src={`${BASE_URL}/${userProfileLaRha.user.userId?.profilePicture}`}
+                src={`${userProfileLaRha.user.userId?.profilePicture}`}
               ></img>
 
               <div

@@ -5,7 +5,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background:linear-gradient(to right, #1e293b, #1a2435) ;
+    background-color: #1A3D50;
     
 
 }
@@ -16,4 +16,6 @@
   width: 100%;
   
 }
+
+
 

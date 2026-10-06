@@ -31,15 +31,16 @@ function Discover() {
                     onClick={() => {
                       router.push(`/view_profile/${user.userId?.userName}`);
                     }}
-                    className="cursor-pointer"
+                    className="cursor-pointer flex flex-row gap-10"
                   >
                     <img
-                      src={`${BASE_URL}/${user.userId?.profilePicture}`}
+                    className="h-20 w-20"
+                      src={`${user.userId?.profilePicture}`}
                       alt="profile_picture"
                     ></img>
-                    <div>
-                      <p>{user.userId?.name}</p>
-                      <p>{user.userId?.userName}</p>
+                    <div >
+                      <p className="font-medium">{user.userId?.name}</p>
+                      <p>@{user.userId?.userName}</p>
                     </div>
                   </div>
                 );
