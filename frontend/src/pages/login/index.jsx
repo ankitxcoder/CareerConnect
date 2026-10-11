@@ -69,8 +69,9 @@ function LoginComponent() {
   };
 
   useEffect(() => {
-    if (authState.loggedIn) {
-      router.push("/dashboard");
+    const token = localStorage.getItem("token");
+    if (token || authState.loggedIn) {
+      router.replace("/dashboard");
     }
   }, [authState.loggedIn, router]);
 
