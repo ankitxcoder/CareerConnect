@@ -92,11 +92,11 @@ function Dashboard() {
               </div>
             </div>
             <h3 className="font-extrabold text-lg text-zinc-900 dark:text-white tracking-tight mb-2">
-              Connecting to Workspace
+              Initializing Your Workspace...
             </h3>
             <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed mb-4">
-              Server is hosted on Render Free Tier. Cold boot in progress,
-              please allow up to 10 seconds...
+              Connecting to cloud backend and preparing your feed. Initial
+              spin-up takes about 10–15 seconds. Hang tight!
             </p>
             <div className="w-48 h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
               <div className="h-full bg-gradient-to-r from-indigo-500 to-blue-500 w-1/2 animate-[pulse_1.5s_infinite]"></div>

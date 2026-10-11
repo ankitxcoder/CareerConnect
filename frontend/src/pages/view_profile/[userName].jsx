@@ -182,7 +182,7 @@ export default function ViewProfilePage({ userProfile }) {
                       {onePost.media && (
                         <img
                           className="h-[10vh] mt-2 rounded"
-                          src={`${BASE_URL}/${onePost.media}`}
+                          src={`${onePost.media}`}
                           alt="Post Media"
                         />
                       )}
