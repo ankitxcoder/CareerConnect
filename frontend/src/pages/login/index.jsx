@@ -91,7 +91,7 @@ function LoginComponent() {
   return (
     <UserLayout>
      
-      <div className="flex flex-1 w-full h-[calc(100vh-62.4px)] py-10 px-4 sm:p-8 justify-center items-center bg-zinc-50 dark:bg-[#09090b] transition-colors duration-500">
+      <div className="flex flex-1 w-full h-[calc(100dvh-62.4px)] py-10 px-4 sm:p-8 justify-center items-center bg-zinc-50 dark:bg-[#09090b] transition-colors duration-500">
       
         <div className="flex w-full max-w-[64rem] flex-col md:flex-row overflow-hidden rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-black/5 dark:border-white/10 bg-white/70 dark:bg-zinc-900/50 backdrop-blur-2xl relative">
         

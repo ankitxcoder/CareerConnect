@@ -21,7 +21,7 @@ function UserLayout({ children }) {
 
   return (
     <div
-      className={`${isDarkMode ? "dark" : ""} min-h-screen flex flex-col w-full bg-zinc-50 dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 selection:bg-indigo-500 selection:text-white transition-colors duration-300 relative`}
+      className={`${isDarkMode ? "dark" : ""} min-h-screen min-h-[100dvh] flex flex-col w-full bg-zinc-50 dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 selection:bg-indigo-500 selection:text-white transition-colors duration-300 relative`}
     >
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-indigo-500/5 dark:bg-indigo-500/10 blur-[130px] rounded-full"></div>
