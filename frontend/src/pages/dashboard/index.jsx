@@ -69,6 +69,13 @@ function Dashboard() {
     }
   }, [authState.isTokenThere, dispatch]);
 
+  useEffect(()=>{
+    if(authState.isError && !authState.user){
+      localStorage.removeItem("token");
+      router.replace("/login");
+    }
+  },[authState.isError, authState.user, router])
+
   useEffect(() => {
     if (postState.postId !== "") {
       document.body.style.overflow = "hidden";

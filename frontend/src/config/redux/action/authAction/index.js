@@ -122,7 +122,7 @@ export const getWhatAreMyConnectionRequest = createAsyncThunk(
 
       return thunkAPI.fulfillWithValue(response.data);
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data.messsage);
+      return thunkAPI.rejectWithValue(err.response?.data?.messsage || err.response?.data || err.messsage);
     }
   },
 );
@@ -139,7 +139,7 @@ export const acceptConnection = createAsyncThunk(
 
       return thunkAPI.fulfillWithValue(response.data);
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data.messsage);
+      return thunkAPI.rejectWithValue(err.response?.data?.messsage || err.response?.data || err.messsage);
     }
   },
 );
@@ -156,7 +156,7 @@ export const getUserConnections = createAsyncThunk(
 
       return thunkAPI.fulfillWithValue(response.data);
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data.messsage);
+      return thunkAPI.rejectWithValue(err.response?.data?.messsage || err.response?.data || err.messsage);
     }
   },
 );

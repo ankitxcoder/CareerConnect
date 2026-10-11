@@ -112,13 +112,13 @@ const authSlice = createSlice({
       .addCase(sendConnectionRequest.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.message = action.payload.message;
+        state.message = action.payload?.message || "Request Sent";
       })
 
       .addCase(sendConnectionRequest.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.message = action.payload?.message || action.payload ||"Error";
       })
 
       .addCase(getMyConnectionRequest.pending, (state) => {
@@ -129,13 +129,13 @@ const authSlice = createSlice({
       .addCase(getMyConnectionRequest.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.connections = action.payload.connections || [];
+        state.connections = action.payload?.connections || [];
       })
 
       .addCase(getMyConnectionRequest.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload?.message;
+        state.message = action.payload?.message || action.payload || "Error";
       })
 
       .addCase(getWhatAreMyConnectionRequest.pending, (state) => {
@@ -146,13 +146,13 @@ const authSlice = createSlice({
       .addCase(getWhatAreMyConnectionRequest.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.connectionRequest = action.payload.connections || [];
+        state.connectionRequest = action.payload?.connections || [];
       })
 
       .addCase(getWhatAreMyConnectionRequest.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload.message;
+        state.message = action.payload?.message ||action.payload || "Error";
       })
 
       .addCase(getUserConnections.pending, (state) => {
