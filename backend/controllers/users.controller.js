@@ -2,39 +2,75 @@ import Profile from "../models/profile.model.js";
 import User from "../models/users.model.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import doc from "pdfkit";
 import PDFDocument from "pdfkit";
 import fs from "fs";
 import { connections } from "mongoose";
 import ConnectionRequest from "../models/connections.model.js";
 
 const convertUserDataToPDF = async (userData) => {
-  const doc = new PDFDocument();
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!fs.existsSync("uploads")) {
+        fs.mkdirSync("uploads");
+      }
 
-  const outputPath = crypto.randomBytes(32).toString("hex") + ".pdf";
-  const stream = fs.createWriteStream("uploads/" + outputPath);
+      const doc = new PDFDocument();
+      const outputPath = crypto.randomBytes(32).toString("hex") + ".pdf";
+      const stream = fs.createWriteStream("uploads/" + outputPath);
 
-  doc.pipe(stream);
+      doc.pipe(stream);
 
-  doc.image(`uploads/${userData.userId.profilePicture}`, {
-    align: "center",
-    width: 100,
+      if (userData.userId?.profilePicture) {
+        try {
+          if (userData.userId.profilePicture.startsWith("http")) {
+            const response = await fetch(userData.userId.profilePicture);
+            const arrayBuffer = await response.arrayBuffer();
+            doc.image(Buffer.from(arrayBuffer), {
+              align: "center",
+              width: 100,
+            });
+          } else if (
+            fs.existsSync(`uploads/${userData.userId.profilePicture}`)
+          ) {
+            doc.image(`uploads/${userData.userId.profilePicture}`, {
+              align: "center",
+              width: 100,
+            });
+          }
+        } catch (err) {
+          console.log("PDF Image skipped safely:", err.message);
+        }
+      }
+
+      doc.fontSize(18).text(`CareerConnect Profile`, { align: "center" });
+      doc.moveDown(1.5);
+
+      doc.fontSize(14).text(`Name: ${userData.userId?.name || "N/A"}`);
+      doc.fontSize(14).text(`UserName: ${userData.userId?.userName || "N/A"}`);
+      doc.fontSize(14).text(`Email: ${userData.userId?.email || "N/A"}`);
+      doc.fontSize(14).text(`Position: ${userData.position || "N/A"}`);
+      doc.moveDown();
+
+      doc.fontSize(14).text("Past Work Experience:");
+      userData.pastWork?.forEach((work) => {
+        doc
+          .fontSize(12)
+          .text(
+            `• Company: ${work.company || "N/A"} | Role: ${work.position || "N/A"} (${work.year || "N/A"})`,
+          );
+      });
+
+      stream.on("finish", () => {
+        resolve(outputPath);
+      });
+      stream.on("error", (err) => {
+        reject(err);
+      });
+      doc.end();
+    } catch (err) {
+      reject(err);
+    }
   });
-  doc.fontSize(14).text(`Name:  ${userData.userId.name}`);
-  doc.fontSize(14).text(`UserName : ${userData.userId.userName}`);
-  doc.fontSize(14).text(`Email : ${userData.userId.email}`);
-  doc.fontSize(14).text(`Position:${userData.position}`);
-
-  doc.fontSize(14).text("Past Work : ");
-  userData.pastWork.forEach((work, index) => {
-    doc.fontSize(14).text(`Company Name : ${work.company}`);
-    doc.fontSize(14).text(`Position L ${work.position}`);
-    doc.fontSize(14).text(`Year: ${work.year}`);
-  });
-
-  doc.end();
-
-  return outputPath;
 };
 
 export const register = async (req, res) => {
@@ -49,11 +85,15 @@ export const register = async (req, res) => {
     if (user) return res.status(400).json({ message: "User Already Exist" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    const defaultProfilePic =
+      "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
       userName,
+      profilePicture: defaultProfilePic,
     });
 
     await newUser.save();
@@ -207,16 +247,26 @@ export const getAllUserProfile = async (req, res) => {
 };
 
 export const downloadProfile = async (req, res) => {
-  const user_id = req.query.id;
+  try {
+    const user_id = req.query.id;
 
-  const userProfile = await Profile.findOne({ userId: user_id }).populate(
-    "userId",
-    "name userName email profilePicture",
-  );
+    const userProfile = await Profile.findOne({ userId: user_id }).populate(
+      "userId",
+      "name userName email profilePicture",
+    );
 
-  let outputPath = await convertUserDataToPDF(userProfile); //upr bnaya hu convertUserDataToPDF esko
+    if (!userProfile) {
+      return res.status(404).json({ message: "User profile not found" });
+    }
 
-  return res.json({ message: outputPath });
+    const outputPath = await convertUserDataToPDF(userProfile); //upr bnaya hu convertUserDataToPDF esko
+
+    return res.json({ message: outputPath });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: error.message || "PDF Generation failed" });
+  }
 };
 
 // Checking Connection is Already send or not

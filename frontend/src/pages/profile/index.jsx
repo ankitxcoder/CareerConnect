@@ -50,7 +50,7 @@ function MyProfile() {
   const handleWorkChnage = (index, field, value) => {
     const newWork = [...editData.pastWork];
     // Specific object ka naya clone bana kar usme field update kar rahe hain
-    newWork[index]={...newWork[index],[field]:value};
+    newWork[index] = { ...newWork[index], [field]: value };
     setEditData({ ...editData, pastWork: newWork });
   };
 
@@ -84,9 +84,19 @@ function MyProfile() {
           <div className="profileHeader">
             <div className=" relative h-50 w-full bg-cover bg-center bg-[url(https://cdn.pixabay.com/photo/2022/04/15/07/58/sunset-7133867_1280.jpg)]">
               <img
-                className="absolute object-cover -bottom-10 left-10 w-28 h-28 rounded-full"
-                src={`${userProfileLaRha.user.userId?.profilePicture}`}
-              ></img>
+                className="absolute object-cover -bottom-10 left-10 w-28 h-28 rounded-full border-4 border-white dark:border-gray-800 shadow-md bg-white"
+                src={
+                  userProfileLaRha.user.userId?.profilePicture &&
+                  userProfileLaRha.user.userId.profilePicture !== "undefined"
+                    ? userProfileLaRha.user.userId.profilePicture
+                    : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                }
+                onError={(e) => {
+                  e.currentTarget.src =
+                    "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                }}
+                alt="Profile Avatar"
+              />
 
               <div
                 className="absolute -bottom-10 left-10 w-28 h-28 rounded-full hover:bg-black/50 flex items-center justify-center text-transparent hover:text-white transition-all duration-500  ease-in-out cursor-pointer"
@@ -98,12 +108,10 @@ function MyProfile() {
                 type="file"
                 hidden
                 ref={fileRef}
-                accept="*image/*"
+                accept="image/*"
                 onChange={updateUserProfile}
               ></input>
             </div>
-
-
 
             <div className="mt-15">
               {isEditing ? (

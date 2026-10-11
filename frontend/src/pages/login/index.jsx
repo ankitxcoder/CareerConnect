@@ -6,6 +6,39 @@ import styles from "./styles.module.css";
 import { loginUser, registerUser } from "@/config/redux/action/authAction";
 import { reset } from "@/config/redux/reducer/authReducer";
 
+
+const TypeWriter = () => {
+  const [text, setText] = useState("");
+
+  const fullText = "Elevate your \n professional \n network";
+
+  useEffect(() => {
+    let i = 0;
+    const timer = setInterval(() => {
+      i++;
+      setText(fullText.slice(0, i));
+      if (i === fullText.length) clearInterval(timer);
+    }, 70);
+
+    return () => clearInterval(timer); //to prevent memory leaks
+  }, []);
+
+  return (
+    <h1 className="text-4xl lg:text-5xl font-black text-white leading-[1.1] tracking-tight min-h-[140px] md:min-h-[160px]">
+      {text.split("\n").map((line, index) => (
+        <React.Fragment key={index}>
+          {line}
+          {index !== text.split("\n").length - 1 && <br />}
+        </React.Fragment>
+      ))}
+      <span className="animate-pulse border-r-4 border-indigo-500 ml-1 pr-1"></span>
+    </h1>
+  );
+};
+
+
+
+
 function LoginComponent() {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -56,83 +89,125 @@ function LoginComponent() {
   }, [isLogin, dispatch, setFormData]);
 
   return (
-    <div>
-      <UserLayout>
-        <div className="flex min-h-[calc(100vh-62.4px)] justify-center bg-gradient-to-t from-[#a2a3a4] to-[#131d36] dark:from-[#0A0A0A] to-[#0F172B] px-6 py-6 ">
-          <div className="flex w-full max-w-3xl flex-col md:flex-row overflow-hidden  rounded-2xl shadow-2xl ">
-            <div className="w-full p-8 pb-25  md:w-1/2 justify-items-center font-bold bg-gradient-to-b from-[#e5e7e5] to-[#b5b6b7] ">
-              <p className=" dark:text-gray-700">
-                {isLogin ? "Sign In" : "Sign Up"}
-              </p>
-              {authState.message?.message}
-              <form onSubmit={handleSubmit}>
-                {!isLogin && (
-                  <div className="flex gap-2 mb-5 flex-col gap-5">
-                    <input
-                      className="m-2 border-2 rounded-xl px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400"
-                      type="text"
-                      placeholder="enter Name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                    ></input>
-                    <input
-                      className="m-2 border-2 rounded-xl px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400"
-                      type="text"
-                      placeholder="enter UserName"
-                      name="userName"
-                      value={formData.userName}
-                      onChange={handleChange}
-                    ></input>
-                  </div>
-                )}
+    <UserLayout>
+     
+      <div className="flex flex-1 w-full h-[calc(100vh-62.4px)] py-10 px-4 sm:p-8 justify-center items-center bg-zinc-50 dark:bg-[#09090b] transition-colors duration-500">
+      
+        <div className="flex w-full max-w-[64rem] flex-col md:flex-row overflow-hidden rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-black/5 dark:border-white/10 bg-white/70 dark:bg-zinc-900/50 backdrop-blur-2xl relative">
+        
+          <div className="w-full md:w-1/2 p-8 md:p-14 lg:p-16 flex flex-col justify-center relative z-10">
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight text-zinc-900 dark:text-white mb-2">
+              {isLogin ? "Welcome back" : "Create account"}
+            </h2>
+            <p className="text-zinc-500 dark:text-zinc-400 mb-8 font-medium">
+              {isLogin
+                ? "Enter your details to securely access your workspace."
+                : "Join the exclusive professional network today."}
+            </p>
 
-                <div className="flex flex-col max-w-2x1 gap-5">
+            {authState.message?.message && (
+              <div className="p-4 mb-6 bg-red-500/10 border border-red-500/20 rounded-2xl">
+                <p className="text-red-600 dark:text-red-400 text-sm font-semibold text-center">
+                  {authState.message.message}
+                </p>
+              </div>
+            )}
+
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-4 w-full"
+            >
+              {!isLogin && (
+                <div className="flex flex-col md:flex-row gap-4">
                   <input
-                    className="m-2 rounded-xl border-2 px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400"
-                    type="email"
-                    placeholder="email"
-                    name="email"
-                    value={formData.email}
+                    className="w-full bg-white dark:bg-zinc-950/50 border border-zinc-200 dark:border-white/5 focus:border-indigo-500 dark:focus:border-indigo-500 text-zinc-900 dark:text-white rounded-2xl px-5 py-4 outline-none transition-all placeholder:text-zinc-400 shadow-sm focus:shadow-md focus:shadow-indigo-500/10"
+                    type="text"
+                    placeholder="Full Name"
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
                   />
                   <input
-                    className="border-2 rounded-xl  m-2 px-4 dark:bg-gray-700 dark:border-gray-600 drak:text-white dark:placeholder-gray-400"
-                    type="password"
-                    placeholder="password"
-                    name="password"
-                    value={formData.password}
+                    className="w-full bg-white dark:bg-zinc-950/50 border border-zinc-200 dark:border-white/5 focus:border-indigo-500 dark:focus:border-indigo-500 text-zinc-900 dark:text-white rounded-2xl px-5 py-4 outline-none transition-all placeholder:text-zinc-400 shadow-sm focus:shadow-md focus:shadow-indigo-500/10"
+                    type="text"
+                    placeholder="Username"
+                    name="userName"
+                    value={formData.userName}
                     onChange={handleChange}
                   />
-                  <button
-                    className="w-full bg-[#00D492] cursor-pointer hover:bg-sky-700 transition ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:scale-[1.02] active:scale-95"
-                    type="submit"
-                  >
-                    {" "}
-                    Submit
-                  </button>
                 </div>
-              </form>
+              )}
+
+              <input
+                className="w-full bg-white dark:bg-zinc-950/50 border border-zinc-200 dark:border-white/5 focus:border-indigo-500 dark:focus:border-indigo-500 text-zinc-900 dark:text-white rounded-2xl px-5 py-4 outline-none transition-all placeholder:text-zinc-400 shadow-sm focus:shadow-md focus:shadow-indigo-500/10"
+                type="email"
+                placeholder="Email address"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+
+              <input
+                className="w-full bg-white dark:bg-zinc-950/50 border border-zinc-200 dark:border-white/5 focus:border-indigo-500 dark:focus:border-indigo-500 text-zinc-900 dark:text-white rounded-2xl px-5 py-4 outline-none transition-all placeholder:text-zinc-400 shadow-sm focus:shadow-md focus:shadow-indigo-500/10"
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+
+              <button
+                className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold text-lg rounded-2xl px-5 py-4 mt-4 shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                type="submit"
+              >
+                {isLogin ? "Sign In to Workspace" : "Create Free Account"}
+              </button>
+            </form>
+
+            <p className="text-center font-medium mt-8 text-zinc-500 dark:text-zinc-400">
+              {isLogin ? "Don't have an account?" : "Already a member?"}
+              <span
+                className="ml-2 text-indigo-600 dark:text-indigo-400 cursor-pointer hover:underline transition-all"
+                onClick={() => setIsLogin(!isLogin)}
+              >
+                {isLogin ? "Sign up now" : "Sign in here"}
+              </span>
+            </p>
+          </div>
+
+          
+          <div className="hidden md:flex w-1/2 p-12 relative flex-col justify-between overflow-hidden bg-[#0A0A0A]">
+         
+            <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/40 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="absolute bottom-[-10%] right-[-20%] w-[400px] h-[400px] bg-purple-600/30 rounded-full blur-[100px] pointer-events-none"></div>
+
+            <div className="relative z-10 mt-10">
+              <TypeWriter/>
             </div>
 
-            <div className=" w-full max-w-3xl overflow-hidden pt-10 pb-16 rounded-b-2xl shadow-2xl  text-white md:w-1/2 md:ml-[1px] md:bg-gradient-to-b from-[#e8eae8] to-[#10192e] bg-gradient-to-t from-[#29b54f] to-[#10192e] ">
-              <p className=" text-center font-bold mt-10  transition-all duration-300 -translate-0.5 text-gray-700">
-                {isLogin ? "don't have an account" : "Alreday have an account?"}
+           
+            <div className="relative z-10 bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-3xl shadow-2xl">
+              <p className="text-indigo-50 font-medium leading-relaxed italic text-sm">
+                "CareerConnect has fundamentally changed how I network. The
+                seamless interface and exclusive community access are unmatched
+                in the industry."
               </p>
-              <p
-                className="cursor-pointer text-center font-bold mt-10 hover:underline transition-all duration-300 hover-text hover:text-blue-800 "
-                onClick={() => setIsLogin(!isLogin)
-                  
-                }
-              >
-                {isLogin ? "Sign Up" : "Sign In"}
-
-              </p>
+              <div className="mt-5 flex items-center gap-4">
+                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-lg">
+                  AX
+                </div>
+                <div>
+                  <p className="text-white font-bold text-sm">Ankit X</p>
+                  <p className="text-indigo-200 text-xs font-semibold tracking-wide">
+                    Software Engineering
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </UserLayout>
-    </div>
+      </div>
+    </UserLayout>
   );
 }
 

@@ -28,9 +28,8 @@ export default function ViewProfilePage({ userProfile }) {
   const toKnowuserForConnection =
     authState.user?.userId?._id === userProfile?.userId?._id;
 
-    
   const getUsersPost = async () => {
-    await dispatch(getAboutUser({token:localStorage.getItem("token")}));
+    await dispatch(getAboutUser({ token: localStorage.getItem("token") }));
     await dispatch(getAllPosts());
     await dispatch(
       getMyConnectionRequest({ token: localStorage.getItem("token") }),
@@ -39,7 +38,9 @@ export default function ViewProfilePage({ userProfile }) {
       getWhatAreMyConnectionRequest({ token: localStorage.getItem("token") }),
     );
 
-    await dispatch(getUserConnections({token:localStorage.getItem("token")}));
+    await dispatch(
+      getUserConnections({ token: localStorage.getItem("token") }),
+    );
   };
 
   useEffect(() => {
@@ -80,11 +81,21 @@ export default function ViewProfilePage({ userProfile }) {
     <UserLayout>
       <DashBoardLayout>
         <div className="container">
-          <div className="container flex relative h-50 w-full bg-[url('https://cdn.pixabay.com/photo/2022/04/15/07/58/sunset-7133867_1280.jpg')] bg-red-500">
+          <div className="relative h-48 w-full bg-cover bg-center rounded-2xl bg-[url('https://cdn.pixabay.com/photo/2022/04/15/07/58/sunset-7133867_1280.jpg')]">
             <img
-              className="h-10 w-10 absolute bottom-[-45] left-10 rounded-full w-24 h-24 border-2 border-gray-100"
-              src={`${BASE_URL}/${userProfile?.userId?.profilePicture}`}
-            ></img>
+              className="absolute -bottom-12 left-10 w-28 h-28 rounded-full border-4 border-white dark:border-gray-800 shadow-xl object-cover bg-white z-10"
+              src={
+                userProfile?.userId?.profilePicture &&
+                userProfile.userId.profilePicture !== "undefined"
+                  ? userProfile.userId.profilePicture
+                  : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+              }
+              onError={(e) => {
+                e.currentTarget.src =
+                  "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+              }}
+              alt="User Profile"
+            />
           </div>
 
           <div>
@@ -124,14 +135,24 @@ export default function ViewProfilePage({ userProfile }) {
                   ) : null}
 
                   <div
+                    className="cursor-pointer hover:opacity-80 transition"
                     onClick={async () => {
-                      const response = await api.get(
-                        `/user/download_resume?id=${userProfile.userId._id}`,
-                      );
-                      window.open(
-                        `${BASE_URL}/${response.data.message}`,
-                        "_blank",
-                      );
+                      try {
+                        if (!userProfile?.userId?._id) return;
+                        const response = await api.get(
+                          `/user/download_resume?id=${userProfile.userId._id}`,
+                        );
+                        if (response.data?.message) {
+                          window.open(
+                            `${BASE_URL}/${response.data.message}`,
+                            "_blank",
+                          );
+                        }
+                      } catch (err) {
+                        alert(
+                          "Failed to generate resume PDF. Please check server.",
+                        );
+                      }
                     }}
                   >
                     <svg
@@ -152,7 +173,6 @@ export default function ViewProfilePage({ userProfile }) {
                 </div>
                 <p>{userProfile.bio}</p>
               </div>
-
               <div className="mt-4 ml-auto mr-2">
                 <h1 className="font-bold">Recent Activity</h1>
                 {userPosts.map((onePost) => {
